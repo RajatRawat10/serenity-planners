@@ -170,7 +170,7 @@ const Hero = () => {
 
     px-4
     pb-12
-    pt-[275px]
+    pt-[235px]
 
     /* TABLET */
     sm:min-h-0

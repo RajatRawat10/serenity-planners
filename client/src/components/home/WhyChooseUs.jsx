@@ -49,7 +49,7 @@ const WhyChooseSerenity = () => {
         backgroundColor: "var(--ivory)",
       }}
     >
-      <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16">
 
         <div className="grid items-center gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20 xl:gap-28">
 

@@ -185,7 +185,7 @@ const EnquiryForm = () => {
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+      <div className="relative z-10 mx-auto max-w-[1440px] px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16">
         <div className="grid gap-14 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16 xl:gap-24">
 
           {/* =====================================================

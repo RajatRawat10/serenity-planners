@@ -297,7 +297,7 @@ const Destinations = () => {
                   </span>
 
                   <a
-                    href="#contact"
+                    href="#enquiry"
                     aria-label={`Plan a trip to ${destination.name}`}
                     className="flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300 group-hover:translate-x-1"
                     style={{
@@ -322,7 +322,7 @@ const Destinations = () => {
 
         <div className="mt-12 flex justify-center">
           <a
-            href="#contact"
+            href="#enquiry"
             className="group inline-flex items-center gap-3 rounded-full px-6 py-3.5 text-[13px] font-semibold transition-all duration-300 hover:-translate-y-0.5"
             style={{
               backgroundColor: "var(--charcoal)",

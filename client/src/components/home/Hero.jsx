@@ -372,7 +372,7 @@ const Hero = () => {
               {/* Primary CTA */}
 
               <a
-                href="#contact"
+                href="#enquiry"
                 className="
                   group
                   inline-flex

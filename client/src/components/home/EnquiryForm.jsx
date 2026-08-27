@@ -175,6 +175,7 @@ const EnquiryForm = () => {
         backgroundColor: "var(--ivory)",
       }}
     >
+      <div id="contact" className="absolute top-0 left-0" />
       {/* Decorative background */}
       <div
         aria-hidden="true"

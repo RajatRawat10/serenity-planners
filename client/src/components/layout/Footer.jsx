@@ -28,6 +28,10 @@ const navigationLinks = [
     href: "#destinations",
   },
   {
+    label: "Why Us",
+    href: "#why-serenity",
+  },
+  {
     label: "Testimonials",
     href: "#testimonials",
   },

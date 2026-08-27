@@ -271,7 +271,7 @@ const WhyChooseSerenity = () => {
 
             <div className="mt-10">
               <a
-                href="#contact"
+                href="#enquiry"
                 className="group inline-flex items-center gap-3 rounded-full px-6 py-3.5 text-[13px] font-semibold transition-all duration-300 hover:-translate-y-0.5"
                 style={{
                   backgroundColor: "var(--charcoal)",

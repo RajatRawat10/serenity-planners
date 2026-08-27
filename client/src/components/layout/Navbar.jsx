@@ -25,8 +25,8 @@ const navLinks = [
     href: "#destinations",
   },
   {
-    name: "Contact",
-    href: "#enquiry",
+    name: "Why Us",
+    href: "#why-serenity",
   },
 ];
 

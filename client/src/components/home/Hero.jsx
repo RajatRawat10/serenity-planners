@@ -176,12 +176,12 @@ const Hero = () => {
     sm:min-h-0
     sm:px-6
     sm:pb-12
-    sm:pt-[155px]
+    sm:pt-[195px]
 
     md:min-h-0
     md:px-8
     md:pb-14
-    md:pt-[165px]
+    md:pt-[215px]
 
     /* DESKTOP */
     lg:min-h-[100svh]

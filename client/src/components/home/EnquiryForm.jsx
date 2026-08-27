@@ -170,7 +170,7 @@ const EnquiryForm = () => {
   return (
     <section
       id="enquiry"
-      className="relative overflow-hidden py-20 sm:py-24 lg:py-32"
+      className="relative overflow-hidden py-10 sm:py-16 lg:py-20"
       style={{
         backgroundColor: "var(--ivory)",
       }}

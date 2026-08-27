@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowUpRight,
   Compass,
@@ -128,15 +129,17 @@ const Services = () => {
       }}
     >
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16">
-
         {/* =====================================================
             HEADER
         ====================================================== */}
-
-        <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
-
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.7 }}
+          className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end"
+        >
           <div className="max-w-[720px]">
-
             {/* Eyebrow */}
             <div className="mb-5 flex items-center gap-3">
               <span
@@ -212,12 +215,11 @@ const Services = () => {
               Tell us what you love. We'll help create the rest.
             </p>
           </div>
-        </div>
+        </motion.div>
 
         {/* =====================================================
             FILTER PILLS
         ====================================================== */}
-
         <div className="mt-10">
           <div
             className="flex gap-2 overflow-x-auto pb-2"
@@ -229,11 +231,13 @@ const Services = () => {
               const isActive = activeCategory === category.id;
 
               return (
-                <button
+                <motion.button
                   key={category.id}
                   type="button"
                   onClick={() => setActiveCategory(category.id)}
                   aria-pressed={isActive}
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.96 }}
                   className="shrink-0 rounded-full border px-5 py-2.5 text-[12px] font-medium transition-all duration-300"
                   style={{
                     backgroundColor: isActive
@@ -248,7 +252,7 @@ const Services = () => {
                   }}
                 >
                   {category.label}
-                </button>
+                </motion.button>
               );
             })}
           </div>
@@ -257,147 +261,160 @@ const Services = () => {
         {/* =====================================================
             EXPERIENCE GRID
         ====================================================== */}
+        <motion.div layout className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <AnimatePresence mode="popLayout">
+            {filteredExperiences.map((experience) => {
+              const Icon = experience.icon;
 
-        <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {filteredExperiences.map((experience) => {
-            const Icon = experience.icon;
-
-            return (
-              <article
-                key={experience.id}
-                className="group overflow-hidden rounded-[1.75rem] transition-all duration-500 hover:-translate-y-1"
-                style={{
-                  backgroundColor: "var(--white)",
-                  border: "1px solid var(--border)",
-                }}
-              >
-                {/* =================================================
-                    IMAGE
-                ================================================== */}
-
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <img
-                    src={experience.image}
-                    alt={`${experience.title} travel experience`}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  />
-
-                  {/* Image gradient */}
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      background:
-                        "linear-gradient(to top, rgba(29,27,24,0.58) 0%, rgba(29,27,24,0.04) 65%)",
-                    }}
-                  />
-
-                  {/* Category */}
-                  <div className="absolute left-5 top-5">
-                    <div
-                      className="flex items-center gap-2 rounded-full px-3.5 py-2 text-[10px] font-semibold uppercase tracking-[0.14em] backdrop-blur-md"
-                      style={{
-                        backgroundColor: "rgba(252,250,246,0.92)",
-                        color: "var(--gold-dark)",
-                      }}
-                    >
-                      <Icon
-                        size={13}
-                        strokeWidth={1.6}
-                      />
-
-                      {experience.categoryLabel}
-                    </div>
-                  </div>
-
-                  {/* Image title */}
-                  <div className="absolute bottom-5 left-5 right-5">
-                    <h3
-                      className="text-[26px] leading-tight"
-                      style={{
-                        color: "var(--white)",
-                      }}
-                    >
-                      {experience.title}
-                    </h3>
-                  </div>
-
-                  {/* Hover arrow */}
-                  <div
-                    className="absolute bottom-5 right-5 flex h-10 w-10 translate-y-2 items-center justify-center rounded-full opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
-                    style={{
-                      backgroundColor: "rgba(252,250,246,0.94)",
-                      color: "var(--charcoal)",
-                    }}
-                  >
-                    <ArrowUpRight
-                      size={17}
-                      strokeWidth={1.7}
+              return (
+                <motion.article
+                  key={experience.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, y: -20 }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  whileHover={{ y: -6 }}
+                  className="group overflow-hidden rounded-[1.75rem]"
+                  style={{
+                    backgroundColor: "var(--white)",
+                    border: "1px solid var(--border)",
+                  }}
+                >
+                  {/* =================================================
+                      IMAGE
+                  ================================================== */}
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <motion.img
+                      src={experience.image}
+                      alt={`${experience.title} travel experience`}
+                      loading="lazy"
+                      decoding="async"
+                      whileHover={{ scale: 1.08 }}
+                      transition={{ duration: 0.7, ease: "easeOut" }}
+                      className="h-full w-full object-cover"
                     />
-                  </div>
-                </div>
 
-                {/* =================================================
-                    CONTENT
-                ================================================== */}
-
-                <div className="p-6 sm:p-7">
-
-                  <p
-                    className="text-[13px] leading-6"
-                    style={{
-                      color: "var(--taupe)",
-                    }}
-                  >
-                    {experience.description}
-                  </p>
-
-                  {/* Bottom action */}
-                  <div
-                    className="mt-6 flex items-center justify-between border-t pt-5"
-                    style={{
-                      borderColor: "var(--border)",
-                    }}
-                  >
-                    <span
-                      className="text-[11px] font-semibold uppercase tracking-[0.12em]"
+                    {/* Image gradient */}
+                    <div
+                      className="absolute inset-0"
                       style={{
+                        background:
+                          "linear-gradient(to top, rgba(29,27,24,0.58) 0%, rgba(29,27,24,0.04) 65%)",
+                      }}
+                    />
+
+                    {/* Category */}
+                    <div className="absolute left-5 top-5">
+                      <div
+                        className="flex items-center gap-2 rounded-full px-3.5 py-2 text-[10px] font-semibold uppercase tracking-[0.14em] backdrop-blur-md"
+                        style={{
+                          backgroundColor: "rgba(252,250,246,0.92)",
+                          color: "var(--gold-dark)",
+                        }}
+                      >
+                        <Icon
+                          size={13}
+                          strokeWidth={1.6}
+                        />
+
+                        {experience.categoryLabel}
+                      </div>
+                    </div>
+
+                    {/* Image title */}
+                    <div className="absolute bottom-5 left-5 right-5">
+                      <h3
+                        className="text-[26px] leading-tight"
+                        style={{
+                          color: "var(--white)",
+                        }}
+                      >
+                        {experience.title}
+                      </h3>
+                    </div>
+
+                    {/* Hover arrow */}
+                    <div
+                      className="absolute bottom-5 right-5 flex h-10 w-10 translate-y-2 items-center justify-center rounded-full opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
+                      style={{
+                        backgroundColor: "rgba(252,250,246,0.94)",
                         color: "var(--charcoal)",
                       }}
                     >
-                      Explore experience
-                    </span>
-
-                    <a
-                      href="#enquiry"
-                      aria-label={`Plan ${experience.title}`}
-                      className="flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 group-hover:translate-x-1"
-                      style={{
-                        backgroundColor: "var(--gold-soft)",
-                        color: "var(--gold-dark)",
-                      }}
-                    >
                       <ArrowUpRight
-                        size={15}
+                        size={17}
                         strokeWidth={1.7}
                       />
-                    </a>
+                    </div>
                   </div>
-                </div>
-              </article>
-            );
-          })}
-        </div>
+
+                  {/* =================================================
+                      CONTENT
+                  ================================================== */}
+                  <div className="p-6 sm:p-7">
+                    <p
+                      className="text-[13px] leading-6"
+                      style={{
+                        color: "var(--taupe)",
+                      }}
+                    >
+                      {experience.description}
+                    </p>
+
+                    {/* Bottom action */}
+                    <div
+                      className="mt-6 flex items-center justify-between border-t pt-5"
+                      style={{
+                        borderColor: "var(--border)",
+                      }}
+                    >
+                      <span
+                        className="text-[11px] font-semibold uppercase tracking-[0.12em]"
+                        style={{
+                          color: "var(--charcoal)",
+                        }}
+                      >
+                        Explore experience
+                      </span>
+
+                      <a
+                        href="#enquiry"
+                        aria-label={`Plan ${experience.title}`}
+                        className="flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 group-hover:translate-x-1"
+                        style={{
+                          backgroundColor: "var(--gold-soft)",
+                          color: "var(--gold-dark)",
+                        }}
+                      >
+                        <ArrowUpRight
+                          size={15}
+                          strokeWidth={1.7}
+                        />
+                      </a>
+                    </div>
+                  </div>
+                </motion.article>
+              );
+            })}
+          </AnimatePresence>
+        </motion.div>
 
         {/* =====================================================
             BOTTOM CTA
         ====================================================== */}
-
-        <div className="mt-12 flex justify-center">
-          <a
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mt-12 flex justify-center"
+        >
+          <motion.a
             href="#enquiry"
-            className="group inline-flex items-center gap-3 rounded-full border px-6 py-3.5 text-[13px] font-semibold transition-all duration-300 hover:-translate-y-0.5"
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            className="group inline-flex items-center gap-3 rounded-full border px-6 py-3.5 text-[13px] font-semibold transition-all duration-300"
             style={{
               borderColor: "var(--border-dark)",
               backgroundColor: "transparent",
@@ -422,8 +439,8 @@ const Services = () => {
                 color: "var(--gold-dark)",
               }}
             />
-          </a>
-        </div>
+          </motion.a>
+        </motion.div>
       </div>
     </section>
   );

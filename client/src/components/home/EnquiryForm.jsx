@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { motion, AnimatePresence } from "framer-motion";
 
 import {
   AlertCircle,
@@ -193,7 +194,13 @@ const EnquiryForm = () => {
               LEFT SIDE
           ====================================================== */}
 
-          <div className="lg:pt-5">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:pt-5"
+          >
 
             {/* Eyebrow */}
             <div className="mb-5 flex items-center gap-3">
@@ -384,13 +391,17 @@ const EnquiryForm = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* =====================================================
               FORM CARD
           ====================================================== */}
 
-          <div
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="rounded-[2rem] p-6 sm:p-8 lg:p-10"
             style={{
               backgroundColor: "var(--white)",
@@ -816,7 +827,7 @@ const EnquiryForm = () => {
                 </form>
               </>
             )}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import {
   ArrowUp,
   ArrowUpRight,
@@ -256,8 +257,10 @@ const Footer = () => {
             {/* CTA */}
 
             <div className="shrink-0">
-              <a
+              <motion.a
                 href="#enquiry"
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.98 }}
                 className="
                   group
                   inline-flex
@@ -299,7 +302,7 @@ const Footer = () => {
                     group-hover:translate-x-0.5
                   "
                 />
-              </a>
+              </motion.a>
             </div>
           </div>
         </div>

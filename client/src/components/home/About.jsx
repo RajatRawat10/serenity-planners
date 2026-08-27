@@ -1,6 +1,6 @@
+import { motion } from "framer-motion";
 import {
   ArrowUpRight,
-  Check,
   Compass,
   Heart,
   Sparkles,
@@ -39,14 +39,18 @@ const About = () => {
       }}
     >
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16">
-
         <div className="grid items-center gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20 xl:gap-28">
 
           {/* =================================================
               IMAGE SIDE
           ================================================== */}
-          <div className="relative">
-
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="relative"
+          >
             {/* Decorative gold line */}
             <div
               aria-hidden="true"
@@ -58,9 +62,11 @@ const About = () => {
 
             {/* Image */}
             <div className="relative z-10 aspect-[4/4.6] overflow-hidden rounded-[1.75rem] sm:rounded-[2rem]">
-              <img
+              <motion.img
                 src={aboutImage}
                 alt="Scenic travel destination"
+                whileHover={{ scale: 1.04 }}
+                transition={{ duration: 0.6 }}
                 className="h-full w-full object-cover object-center"
               />
 
@@ -108,7 +114,11 @@ const About = () => {
             </div>
 
             {/* Floating experience card */}
-            <div
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.6 }}
               className="absolute -bottom-7 -right-3 z-20 rounded-2xl px-5 py-4 sm:-right-6 sm:px-6 sm:py-5"
               style={{
                 backgroundColor: "var(--white)",
@@ -151,14 +161,19 @@ const About = () => {
                   </p>
                 </div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* =================================================
               CONTENT SIDE
           ================================================== */}
-          <div className="max-w-[620px]">
-
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="max-w-[620px]"
+          >
             {/* Eyebrow */}
             <div className="mb-5 flex items-center gap-3">
               <span
@@ -223,12 +238,16 @@ const About = () => {
 
             {/* Benefits */}
             <div className="mt-9 space-y-5">
-              {benefits.map((benefit) => {
+              {benefits.map((benefit, i) => {
                 const Icon = benefit.icon;
 
                 return (
-                  <div
+                  <motion.div
                     key={benefit.title}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
                     className="flex gap-4"
                   >
                     {/* Icon */}
@@ -265,7 +284,7 @@ const About = () => {
                         {benefit.description}
                       </p>
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
@@ -292,7 +311,7 @@ const About = () => {
                 />
               </a>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

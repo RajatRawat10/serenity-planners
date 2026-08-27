@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import {
   ArrowUpRight,
   Check,
@@ -40,6 +41,25 @@ const reasons = [
   },
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+const reasonVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
+
 const WhyChooseSerenity = () => {
   return (
     <section
@@ -50,15 +70,18 @@ const WhyChooseSerenity = () => {
       }}
     >
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16">
-
         <div className="grid items-center gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20 xl:gap-28">
 
           {/* =====================================================
-              LEFT — IMAGE
+              LEFT — IMAGE WITH REVEAL
           ====================================================== */}
-
-          <div className="relative order-2 lg:order-1">
-
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="relative order-2 lg:order-1"
+          >
             {/* Decorative frame */}
             <div
               aria-hidden="true"
@@ -69,12 +92,14 @@ const WhyChooseSerenity = () => {
             />
 
             <div className="relative z-10 aspect-[4/4.7] overflow-hidden rounded-[2rem]">
-              <img
+              <motion.img
                 src={whyChooseImage}
                 alt="Scenic destination representing thoughtful travel"
                 loading="lazy"
                 decoding="async"
-                className="h-full w-full object-cover object-center transition-transform duration-700 hover:scale-[1.02]"
+                whileHover={{ scale: 1.04 }}
+                transition={{ duration: 0.6 }}
+                className="h-full w-full object-cover object-center"
               />
 
               {/* Overlay */}
@@ -105,7 +130,11 @@ const WhyChooseSerenity = () => {
             </div>
 
             {/* Floating detail card */}
-            <div
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 15 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.5 }}
               className="absolute -right-3 -top-5 z-20 hidden w-[190px] rounded-2xl p-5 sm:-right-6 sm:block"
               style={{
                 backgroundColor: "var(--white)",
@@ -144,15 +173,19 @@ const WhyChooseSerenity = () => {
               >
                 No cookie-cutter itineraries.
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* =====================================================
-              RIGHT — CONTENT
+              RIGHT — CONTENT WITH STAGGERED REVEAL
           ====================================================== */}
-
-          <div className="order-1 max-w-[680px] lg:order-2">
-
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="order-1 max-w-[680px] lg:order-2"
+          >
             {/* Eyebrow */}
             <div className="mb-5 flex items-center gap-3">
               <span
@@ -204,16 +237,22 @@ const WhyChooseSerenity = () => {
             </p>
 
             {/* =================================================
-                REASONS GRID
+                REASONS GRID (STAGGERED REVEAL)
             ================================================== */}
-
-            <div className="mt-10 grid gap-x-8 gap-y-8 sm:grid-cols-2">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={containerVariants}
+              className="mt-10 grid gap-x-8 gap-y-8 sm:grid-cols-2"
+            >
               {reasons.map((reason) => {
                 const Icon = reason.icon;
 
                 return (
-                  <div
+                  <motion.div
                     key={reason.number}
+                    variants={reasonVariants}
                     className="group"
                   >
                     {/* Top row */}
@@ -260,19 +299,20 @@ const WhyChooseSerenity = () => {
                     >
                       {reason.description}
                     </p>
-                  </div>
+                  </motion.div>
                 );
               })}
-            </div>
+            </motion.div>
 
             {/* =================================================
                 CTA
             ================================================== */}
-
             <div className="mt-10">
-              <a
+              <motion.a
                 href="#enquiry"
-                className="group inline-flex items-center gap-3 rounded-full px-6 py-3.5 text-[13px] font-semibold transition-all duration-300 hover:-translate-y-0.5"
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                className="group inline-flex items-center gap-3 rounded-full px-6 py-3.5 text-[13px] font-semibold transition-all duration-300"
                 style={{
                   backgroundColor: "var(--charcoal)",
                   color: "var(--white)",
@@ -288,9 +328,9 @@ const WhyChooseSerenity = () => {
                     color: "var(--gold-light)",
                   }}
                 />
-              </a>
+              </motion.a>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

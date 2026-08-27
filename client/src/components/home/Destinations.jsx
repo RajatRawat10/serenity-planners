@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import {
   ArrowUpRight,
   MapPin,
@@ -61,9 +62,27 @@ const destinations = [
   },
 ];
 
-/* =========================================================
-   COMPONENT
-========================================================= */
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+};
 
 const Destinations = () => {
   return (
@@ -75,15 +94,17 @@ const Destinations = () => {
       }}
     >
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16">
-
         {/* =====================================================
             SECTION HEADER
         ====================================================== */}
-
-        <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
-
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.7 }}
+          className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end"
+        >
           <div className="max-w-[720px]">
-
             {/* Eyebrow */}
             <div className="mb-5 flex items-center gap-3">
               <span
@@ -169,33 +190,40 @@ const Destinations = () => {
               Tell us the destination. We'll help shape the journey.
             </p>
           </div>
-        </div>
+        </motion.div>
 
         {/* =====================================================
             DESTINATION GRID
         ====================================================== */}
-
-        <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-40px" }}
+          variants={containerVariants}
+          className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3"
+        >
           {destinations.map((destination) => (
-            <article
+            <motion.article
               key={destination.name}
+              variants={cardVariants}
+              whileHover={{ y: -7 }}
               className="group overflow-hidden rounded-[1.75rem] bg-[var(--white)]"
               style={{
                 border: "1px solid var(--border)",
               }}
             >
-
               {/* =================================================
                   IMAGE
               ================================================== */}
-
               <div className="relative aspect-[4/4.2] overflow-hidden">
-                <img
+                <motion.img
                   src={destination.image}
                   alt={`${destination.name} travel destination`}
                   loading="lazy"
                   decoding="async"
-                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  whileHover={{ scale: 1.07 }}
+                  transition={{ duration: 0.7, ease: "easeOut" }}
+                  className="h-full w-full object-cover"
                 />
 
                 {/* Image overlay */}
@@ -222,7 +250,6 @@ const Destinations = () => {
 
                 {/* Destination information */}
                 <div className="absolute bottom-5 left-5 right-5">
-
                   <div
                     className="mb-2 flex items-center gap-1.5 text-[11px]"
                     style={{
@@ -268,9 +295,7 @@ const Destinations = () => {
               {/* =================================================
                   CARD CONTENT
               ================================================== */}
-
               <div className="p-6 sm:p-7">
-
                 <p
                   className="text-[13px] leading-6"
                   style={{
@@ -312,18 +337,25 @@ const Destinations = () => {
                   </a>
                 </div>
               </div>
-            </article>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
 
         {/* =====================================================
             BOTTOM CTA
         ====================================================== */}
-
-        <div className="mt-12 flex justify-center">
-          <a
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mt-12 flex justify-center"
+        >
+          <motion.a
             href="#enquiry"
-            className="group inline-flex items-center gap-3 rounded-full px-6 py-3.5 text-[13px] font-semibold transition-all duration-300 hover:-translate-y-0.5"
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            className="group inline-flex items-center gap-3 rounded-full px-6 py-3.5 text-[13px] font-semibold transition-all duration-300"
             style={{
               backgroundColor: "var(--charcoal)",
               color: "var(--white)",
@@ -348,8 +380,8 @@ const Destinations = () => {
                 color: "var(--gold-light)",
               }}
             />
-          </a>
-        </div>
+          </motion.a>
+        </motion.div>
       </div>
     </section>
   );

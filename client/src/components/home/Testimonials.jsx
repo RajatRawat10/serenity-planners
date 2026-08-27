@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronLeft,
   ChevronRight,
@@ -29,21 +30,33 @@ const testimonials = [
 
 const Testimonials = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(1); // 1 = next, -1 = prev
 
   const currentTestimonial = testimonials[currentIndex];
 
   const nextTestimonial = () => {
-    setCurrentIndex(
-      (prev) => (prev + 1) % testimonials.length
-    );
+    setDirection(1);
+    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
   };
 
   const prevTestimonial = () => {
-    setCurrentIndex(
-      (prev) =>
-        (prev - 1 + testimonials.length) %
-        testimonials.length
-    );
+    setDirection(-1);
+    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
+
+  const variants = {
+    enter: (dir) => ({
+      x: dir > 0 ? 40 : -40,
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: (dir) => ({
+      x: dir < 0 ? 40 : -40,
+      opacity: 0,
+    }),
   };
 
   return (
@@ -65,13 +78,16 @@ const Testimonials = () => {
       />
 
       <div className="relative z-10 mx-auto max-w-[1440px] px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16">
-
         {/* =====================================================
             HEADER
         ====================================================== */}
-
-        <div className="mx-auto max-w-[700px] text-center">
-
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.7 }}
+          className="mx-auto max-w-[700px] text-center"
+        >
           {/* Eyebrow */}
           <div className="mb-5 flex items-center justify-center gap-3">
             <span
@@ -136,16 +152,14 @@ const Testimonials = () => {
             The best measure of a journey is how it makes you feel
             long after you've returned home.
           </p>
-        </div>
+        </motion.div>
 
         {/* =====================================================
-            TESTIMONIAL
+            TESTIMONIAL CAROUSEL
         ====================================================== */}
-
         <div className="mx-auto mt-12 max-w-[900px]">
-
           <div
-            className="relative rounded-[2rem] p-7 sm:p-10 lg:p-14"
+            className="relative overflow-hidden rounded-[2rem] p-7 sm:p-10 lg:p-14"
             style={{
               backgroundColor: "var(--ivory)",
               border: "1px solid var(--border)",
@@ -153,7 +167,6 @@ const Testimonials = () => {
                 "0 25px 70px rgba(29, 27, 24, 0.07)",
             }}
           >
-
             {/* Quote icon */}
             <div
               className="mb-8 flex h-12 w-12 items-center justify-center rounded-full"
@@ -168,17 +181,31 @@ const Testimonials = () => {
               />
             </div>
 
-            {/* Quote */}
-            <blockquote
-              className="max-w-[760px] text-[22px] leading-[1.55] sm:text-[28px] lg:text-[32px]"
-              style={{
-                color: "var(--charcoal)",
-                fontFamily:
-                  '"Playfair Display", Georgia, serif',
-              }}
-            >
-              “{currentTestimonial.quote}”
-            </blockquote>
+            {/* Dynamic Quote with AnimatePresence */}
+            <div className="min-h-[160px] sm:min-h-[140px] lg:min-h-[130px]">
+              <AnimatePresence mode="wait" custom={direction}>
+                <motion.div
+                  key={currentIndex}
+                  custom={direction}
+                  variants={variants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.35, ease: "easeInOut" }}
+                >
+                  <blockquote
+                    className="max-w-[760px] text-[22px] leading-[1.55] sm:text-[28px] lg:text-[32px]"
+                    style={{
+                      color: "var(--charcoal)",
+                      fontFamily:
+                        '"Playfair Display", Georgia, serif',
+                    }}
+                  >
+                    “{currentTestimonial.quote}”
+                  </blockquote>
+                </motion.div>
+              </AnimatePresence>
+            </div>
 
             {/* Divider */}
             <div
@@ -190,31 +217,37 @@ const Testimonials = () => {
 
             {/* Author + Navigation */}
             <div className="flex flex-col gap-7 sm:flex-row sm:items-center sm:justify-between">
-
               {/* Author */}
-              <div>
-                <p
-                  className="text-[14px] font-semibold"
-                  style={{
-                    color: "var(--charcoal)",
-                  }}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentIndex}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.25 }}
                 >
-                  {currentTestimonial.author}
-                </p>
+                  <p
+                    className="text-[14px] font-semibold"
+                    style={{
+                      color: "var(--charcoal)",
+                    }}
+                  >
+                    {currentTestimonial.author}
+                  </p>
 
-                <p
-                  className="mt-1 text-[11px] uppercase tracking-[0.15em]"
-                  style={{
-                    color: "var(--taupe-light)",
-                  }}
-                >
-                  {currentTestimonial.location}
-                </p>
-              </div>
+                  <p
+                    className="mt-1 text-[11px] uppercase tracking-[0.15em]"
+                    style={{
+                      color: "var(--taupe-light)",
+                    }}
+                  >
+                    {currentTestimonial.location}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
 
-              {/* Navigation */}
+              {/* Navigation Controls */}
               <div className="flex items-center gap-3">
-
                 <span
                   className="mr-2 text-[11px] font-medium tabular-nums"
                   style={{
@@ -226,11 +259,13 @@ const Testimonials = () => {
                   {String(testimonials.length).padStart(2, "0")}
                 </span>
 
-                <button
+                <motion.button
                   type="button"
                   onClick={prevTestimonial}
+                  whileHover={{ scale: 1.08, x: -2 }}
+                  whileTap={{ scale: 0.92 }}
                   aria-label="Previous testimonial"
-                  className="flex h-11 w-11 items-center justify-center rounded-full border transition-all duration-300 hover:-translate-x-0.5"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border transition-colors duration-300"
                   style={{
                     borderColor: "var(--border-dark)",
                     backgroundColor: "var(--white)",
@@ -241,13 +276,15 @@ const Testimonials = () => {
                     size={18}
                     strokeWidth={1.6}
                   />
-                </button>
+                </motion.button>
 
-                <button
+                <motion.button
                   type="button"
                   onClick={nextTestimonial}
+                  whileHover={{ scale: 1.08, x: 2 }}
+                  whileTap={{ scale: 0.92 }}
                   aria-label="Next testimonial"
-                  className="flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 hover:translate-x-0.5"
+                  className="flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-300"
                   style={{
                     backgroundColor: "var(--charcoal)",
                     color: "var(--white)",
@@ -257,7 +294,7 @@ const Testimonials = () => {
                     size={18}
                     strokeWidth={1.6}
                   />
-                </button>
+                </motion.button>
               </div>
             </div>
 
@@ -267,7 +304,10 @@ const Testimonials = () => {
                 <button
                   key={index}
                   type="button"
-                  onClick={() => setCurrentIndex(index)}
+                  onClick={() => {
+                    setDirection(index > currentIndex ? 1 : -1);
+                    setCurrentIndex(index);
+                  }}
                   aria-label={`Go to testimonial ${index + 1}`}
                   className="h-1 rounded-full transition-all duration-300"
                   style={{
@@ -289,7 +329,6 @@ const Testimonials = () => {
         {/* =====================================================
             SMALL TRUST MESSAGE
         ====================================================== */}
-
         <div className="mt-10 flex justify-center">
           <div className="flex items-center gap-2">
             <span

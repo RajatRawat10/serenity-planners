@@ -1,10 +1,6 @@
-
-import { useState } from "react";
-import {
-  ArrowUpRight,
-  Menu,
-  X,
-} from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 import logo from "../../assets/home/logo.png";
 
 const navLinks = [
@@ -32,6 +28,17 @@ const navLinks = [
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleNavClick = () => {
     setIsMenuOpen(false);
@@ -39,17 +46,22 @@ const Navbar = () => {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 w-full">
-      <nav
-        className="border-b backdrop-blur-xl"
+      <motion.nav
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="border-b transition-colors duration-300 backdrop-blur-xl"
         style={{
-          backgroundColor: "rgba(252, 250, 246, 0.95)",
-          borderColor: "var(--border)",
+          backgroundColor: scrolled
+            ? "rgba(252, 250, 246, 0.98)"
+            : "rgba(252, 250, 246, 0.90)",
+          borderColor: scrolled ? "var(--border-dark)" : "var(--border)",
+          boxShadow: scrolled ? "0 4px 20px rgba(29, 27, 24, 0.05)" : "none",
         }}
       >
         {/* =====================================================
             MAIN NAVBAR
         ====================================================== */}
-
         <div
           className="
             mx-auto
@@ -70,7 +82,6 @@ const Navbar = () => {
           {/* =====================================================
               LOGO
           ====================================================== */}
-
           <a
             href="#home"
             onClick={handleNavClick}
@@ -93,24 +104,20 @@ const Navbar = () => {
               xl:w-[220px]
             "
           >
-            <img
+            <motion.img
               src={logo}
               alt="Serenity Planners"
+              whileHover={{ scale: 1.18 }}
+              transition={{ duration: 0.3 }}
               className="
                 h-full
                 w-full
                 scale-[1.12]
                 object-contain
                 object-center
-                transition-transform
-                duration-300
-                group-hover:scale-[1.16]
                 sm:scale-[1.15]
-                sm:group-hover:scale-[1.19]
                 md:scale-[1.18]
-                md:group-hover:scale-[1.22]
                 lg:scale-[1.2]
-                lg:group-hover:scale-[1.24]
               "
             />
           </a>
@@ -118,7 +125,6 @@ const Navbar = () => {
           {/* =====================================================
               DESKTOP NAVIGATION
           ====================================================== */}
-
           <div
             className="
               hidden
@@ -142,6 +148,8 @@ const Navbar = () => {
                 <a
                   key={link.name}
                   href={link.href}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
                   className="
                     group
                     relative
@@ -165,24 +173,29 @@ const Navbar = () => {
                 >
                   {link.name}
 
-                  <span
-                    className={`
-                      absolute
-                      bottom-0
-                      left-1
-                      h-px
-                      transition-all
-                      duration-300
-                      ${
-                        index === 0
-                          ? "w-[calc(100%-8px)]"
-                          : "w-0 group-hover:w-[calc(100%-8px)]"
-                      }
-                    `}
-                    style={{
-                      backgroundColor: "var(--gold)",
-                    }}
-                  />
+                  {/* Underline animation */}
+                  {index === 0 ? (
+                    <motion.span
+                      layoutId="activeUnderline"
+                      className="absolute bottom-0 left-1 right-1 h-px"
+                      style={{
+                        backgroundColor: "var(--gold)",
+                      }}
+                    />
+                  ) : (
+                    hoveredIndex === index && (
+                      <motion.span
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        exit={{ scaleX: 0 }}
+                        transition={{ duration: 0.25, ease: "easeOut" }}
+                        className="absolute bottom-0 left-1 right-1 h-px origin-left"
+                        style={{
+                          backgroundColor: "var(--gold)",
+                        }}
+                      />
+                    )
+                  )}
                 </a>
               ))}
             </div>
@@ -191,9 +204,11 @@ const Navbar = () => {
           {/* =====================================================
               DESKTOP CTA
           ====================================================== */}
-
-          <a
+          <motion.a
             href="#enquiry"
+            whileHover={{ y: -2, scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            transition={{ duration: 0.2 }}
             className="
               group
               hidden
@@ -208,7 +223,6 @@ const Navbar = () => {
               tracking-wide
               transition-all
               duration-300
-              hover:-translate-y-0.5
               lg:flex
               xl:px-5
               xl:py-3.5
@@ -219,8 +233,7 @@ const Navbar = () => {
             style={{
               backgroundColor: "var(--gold)",
               color: "var(--white)",
-              boxShadow:
-                "0 8px 24px rgba(176, 138, 74, 0.18)",
+              boxShadow: "0 8px 24px rgba(176, 138, 74, 0.18)",
             }}
           >
             <span>Plan Your Journey</span>
@@ -238,12 +251,11 @@ const Navbar = () => {
                 xl:w-4
               "
             />
-          </a>
+          </motion.a>
 
           {/* =====================================================
               MOBILE MENU BUTTON
           ====================================================== */}
-
           <button
             type="button"
             onClick={() => setIsMenuOpen((prev) => !prev)}
@@ -292,115 +304,114 @@ const Navbar = () => {
         {/* =====================================================
             MOBILE NAVIGATION
         ====================================================== */}
-
-        <div
-          className={`
-            overflow-hidden
-            border-t
-            transition-all
-            duration-300
-            ease-out
-            lg:hidden
-            ${
-              isMenuOpen
-                ? "max-h-[500px] opacity-100"
-                : "max-h-0 opacity-0"
-            }
-          `}
-          style={{
-            backgroundColor: "var(--ivory)",
-            borderColor: "var(--border)",
-          }}
-        >
-          <div
-            className="
-              mx-auto
-              w-full
-              max-w-[1440px]
-              px-4
-              pb-5
-              pt-1
-              sm:px-6
-              sm:pb-6
-              md:px-8
-            "
-          >
-            <div className="flex flex-col">
-              {navLinks.map((link, index) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={handleNavClick}
-                  className="
-                    flex
-                    min-h-[48px]
-                    items-center
-                    border-b
-                    py-3
-                    text-[14px]
-                    font-medium
-                    transition-colors
-                    duration-200
-                    sm:min-h-[52px]
-                    sm:text-[15px]
-                  "
-                  style={{
-                    color:
-                      index === 0
-                        ? "var(--gold-dark)"
-                        : "var(--charcoal)",
-                    borderColor: "var(--border)",
-                  }}
-                >
-                  {link.name}
-                </a>
-              ))}
-
-              {/* Mobile CTA */}
-
-              <a
-                href="#enquiry"
-                onClick={handleNavClick}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="overflow-hidden border-t lg:hidden"
+              style={{
+                backgroundColor: "var(--ivory)",
+                borderColor: "var(--border)",
+              }}
+            >
+              <div
                 className="
-                  mt-4
-                  flex
-                  min-h-[48px]
+                  mx-auto
                   w-full
-                  items-center
-                  justify-center
-                  gap-2
-                  rounded-full
-                  px-5
-                  py-3
-                  text-[13px]
-                  font-semibold
-                  transition-all
-                  duration-300
-                  active:scale-[0.98]
-                  sm:mt-5
-                  sm:min-h-[52px]
-                  sm:text-sm
+                  max-w-[1440px]
+                  px-4
+                  pb-5
+                  pt-1
+                  sm:px-6
+                  sm:pb-6
+                  md:px-8
                 "
-                style={{
-                  backgroundColor: "var(--gold)",
-                  color: "var(--white)",
-                }}
               >
-                <span>Plan Your Journey</span>
+                <div className="flex flex-col">
+                  {navLinks.map((link, index) => (
+                    <motion.a
+                      key={link.name}
+                      href={link.href}
+                      initial={{ x: -10, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: index * 0.05 + 0.1 }}
+                      onClick={handleNavClick}
+                      className="
+                        flex
+                        min-h-[48px]
+                        items-center
+                        border-b
+                        py-3
+                        text-[14px]
+                        font-medium
+                        transition-colors
+                        duration-200
+                        sm:min-h-[52px]
+                        sm:text-[15px]
+                      "
+                      style={{
+                        color:
+                          index === 0
+                            ? "var(--gold-dark)"
+                            : "var(--charcoal)",
+                        borderColor: "var(--border)",
+                      }}
+                    >
+                      {link.name}
+                    </motion.a>
+                  ))}
 
-                <ArrowUpRight
-                  size={16}
-                  strokeWidth={1.8}
-                  className="shrink-0"
-                />
-              </a>
-            </div>
-          </div>
-        </div>
-      </nav>
+                  {/* Mobile CTA */}
+                  <motion.a
+                    href="#enquiry"
+                    initial={{ y: 10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: navLinks.length * 0.05 + 0.1 }}
+                    onClick={handleNavClick}
+                    className="
+                      mt-4
+                      flex
+                      min-h-[48px]
+                      w-full
+                      items-center
+                      justify-center
+                      gap-2
+                      rounded-full
+                      px-5
+                      py-3
+                      text-[13px]
+                      font-semibold
+                      transition-all
+                      duration-300
+                      active:scale-[0.98]
+                      sm:mt-5
+                      sm:min-h-[52px]
+                      sm:text-sm
+                    "
+                    style={{
+                      backgroundColor: "var(--gold)",
+                      color: "var(--white)",
+                    }}
+                  >
+                    <span>Plan Your Journey</span>
+
+                    <ArrowUpRight
+                      size={16}
+                      strokeWidth={1.8}
+                      className="shrink-0"
+                    />
+                  </motion.a>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.nav>
     </header>
   );
 };
 
 export default Navbar;
-

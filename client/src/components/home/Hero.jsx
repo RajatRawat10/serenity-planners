@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import {
   ArrowDown,
   ArrowUpRight,
@@ -9,75 +10,99 @@ import heroBg from "../../assets/home/herobg.webp";
 import heroMobile from "../../assets/home/mobilehero.webp";
 import heroTablet from "../../assets/home/tablethero.webp";
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 25 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.215, 0.61, 0.355, 1],
+    },
+  },
+};
+
 const Hero = () => {
   return (
-  <section
-  id="home"
-  className="
-    relative
-    isolate
-    w-full
-    overflow-hidden
-    bg-[var(--charcoal)]
+    <section
+      id="home"
+      className="
+        relative
+        isolate
+        w-full
+        overflow-hidden
+        bg-[var(--charcoal)]
 
-    min-h-[520px]
+        min-h-[520px]
 
-    sm:min-h-[680px]
+        sm:min-h-[680px]
 
-    md:min-h-[720px]
+        md:min-h-[720px]
 
-    lg:min-h-[100svh]
-  "
->
+        lg:min-h-[100svh]
+      "
+    >
       {/* =====================================================
-          RESPONSIVE BACKGROUND
+          RESPONSIVE BACKGROUND WITH SLOW ZOOM
       ====================================================== */}
-
-      <picture
-        className="
-          absolute
-          inset-0
-          z-0
-          block
-          h-full
-          w-full
-        "
+      <motion.div
+        initial={{ scale: 1, opacity: 0.8 }}
+        animate={{ scale: 1.07, opacity: 1 }}
+        transition={{
+          scale: {
+            duration: 15,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut",
+          },
+          opacity: { duration: 1.2 },
+        }}
+        className="absolute inset-0 z-0 h-full w-full"
       >
-        {/* Mobile */}
+        <picture className="block h-full w-full">
+          {/* Mobile */}
+          <source
+            media="(max-width: 639px)"
+            srcSet={heroMobile}
+          />
 
-        <source
-          media="(max-width: 639px)"
-          srcSet={heroMobile}
-        />
+          {/* Tablet */}
+          <source
+            media="(min-width: 640px) and (max-width: 1023px)"
+            srcSet={heroTablet}
+          />
 
-        {/* Tablet */}
-
-        <source
-          media="(min-width: 640px) and (max-width: 1023px)"
-          srcSet={heroTablet}
-        />
-
-        {/* Desktop */}
-
-        <img
-          src={heroBg}
-          alt="Beautiful travel destination"
-          className="
-            absolute
-            inset-0
-            block
-            h-full
-            w-full
-            object-cover
-            object-center
-          "
-        />
-      </picture>
+          {/* Desktop */}
+          <img
+            src={heroBg}
+            alt="Beautiful travel destination"
+            className="
+              absolute
+              inset-0
+              block
+              h-full
+              w-full
+              object-cover
+              object-center
+            "
+          />
+        </picture>
+      </motion.div>
 
       {/* =====================================================
           DESKTOP OVERLAY
       ====================================================== */}
-
       <div
         className="
           pointer-events-none
@@ -94,7 +119,6 @@ const Hero = () => {
       {/* =====================================================
           MOBILE OVERLAY
       ====================================================== */}
-
       <div
         className="
           pointer-events-none
@@ -112,7 +136,6 @@ const Hero = () => {
       {/* =====================================================
           TABLET OVERLAY
       ====================================================== */}
-
       <div
         className="
           pointer-events-none
@@ -132,7 +155,6 @@ const Hero = () => {
       {/* =====================================================
           BOTTOM GRADIENT
       ====================================================== */}
-
       <div
         className="
           pointer-events-none
@@ -154,101 +176,68 @@ const Hero = () => {
       {/* =====================================================
           CONTENT
       ====================================================== */}
-
-   <div
-  className="
-    relative
-    z-10
-    mx-auto
-    flex
-    w-full
-    max-w-[1440px]
-
-    min-h-[750px]
-
-    items-start
-
-    px-4
-    pb-12
-    pt-[235px]
-
-    /* TABLET */
-    sm:min-h-0
-    sm:px-6
-    sm:pb-12
-    sm:pt-[195px]
-
-    md:min-h-0
-    md:px-8
-    md:pb-14
-    md:pt-[215px]
-
-    /* DESKTOP */
-    lg:min-h-[100svh]
-    lg:items-center
-    lg:px-10
-    lg:pb-24
-    lg:pt-24
-
-    xl:px-12
-
-    2xl:px-16
-  "
->
+      <div
+        className="
+          relative
+          z-10
+          mx-auto
+          flex
+          w-full
+          max-w-[1440px]
+          min-h-[750px]
+          items-start
+          px-4
+          pb-12
+          pt-[235px]
+          sm:min-h-0
+          sm:px-6
+          sm:pb-12
+          sm:pt-[195px]
+          md:min-h-0
+          md:px-8
+          md:pb-14
+          md:pt-[215px]
+          lg:min-h-[100svh]
+          lg:items-center
+          lg:px-10
+          lg:pb-24
+          lg:pt-24
+          xl:px-12
+          2xl:px-16
+        "
+      >
         <div
           className="
             grid
             w-full
             grid-cols-1
             items-start
-
             gap-8
-
             sm:gap-10
-
             md:gap-10
-
-            lg:items-center
             lg:grid-cols-[minmax(0,1fr)_auto]
+            lg:items-center
             lg:gap-10
-
             xl:gap-16
-
             2xl:gap-20
           "
         >
           {/* =================================================
-              LEFT CONTENT
+              LEFT CONTENT ENTRANCE
           ================================================== */}
-
-          <div
-            className="
-              min-w-0
-              max-w-[760px]
-            "
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+            className="min-w-0 max-w-[760px]"
           >
             {/* Eyebrow */}
-
-            <div
-              className="
-                mb-4
-                flex
-                items-center
-                gap-2.5
-
-                sm:mb-5
-                sm:gap-3
-
-                md:mb-5
-              "
+            <motion.div
+              variants={itemVariants}
+              className="mb-4 flex items-center gap-2.5 sm:mb-5 sm:gap-3"
             >
               <span
-                className="
-                  h-px
-                  w-7
-                  shrink-0
-                  sm:w-10
-                "
+                className="h-px w-7 shrink-0 sm:w-10"
                 style={{
                   backgroundColor: "var(--gold-light)",
                 }}
@@ -261,10 +250,8 @@ const Hero = () => {
                   font-semibold
                   uppercase
                   tracking-[0.17em]
-
                   sm:text-[10px]
                   sm:tracking-[0.25em]
-
                   md:text-[11px]
                   md:tracking-[0.28em]
                 "
@@ -272,26 +259,20 @@ const Hero = () => {
                   color: "var(--gold-light)",
                 }}
               >
-                Curated Travel Experiences
+                Personalized Travel Planning
               </span>
-            </div>
+            </motion.div>
 
-            {/* =================================================
-                MAIN HEADING
-            ================================================== */}
-
-            <h1
+            {/* Main Heading */}
+            <motion.h1
+              variants={itemVariants}
               className="
                 max-w-[760px]
-
                 text-[clamp(2.65rem,9vw,7rem)]
                 leading-[0.91]
                 tracking-[-0.045em]
-
                 sm:text-[clamp(3.1rem,8vw,6rem)]
-
                 md:text-[clamp(3.6rem,7vw,6.5rem)]
-
                 lg:text-[clamp(4rem,6.2vw,7rem)]
               "
               style={{
@@ -299,44 +280,30 @@ const Hero = () => {
               }}
             >
               Your journey.
-
               <span
-                className="
-                  mt-1
-                  block
-                  italic
-                  font-normal
-
-                  sm:mt-2
-                "
+                className="mt-1 block italic font-normal sm:mt-2"
                 style={{
                   color: "var(--gold-light)",
                 }}
               >
-                Beautifully planned.
+                Made personal.
               </span>
-            </h1>
+            </motion.h1>
 
-            {/* =================================================
-                DESCRIPTION
-            ================================================== */}
-
-            <p
+            {/* Description */}
+            <motion.p
+              variants={itemVariants}
               className="
                 mt-4
                 max-w-[590px]
-
                 text-[13px]
                 leading-6
-
                 sm:mt-5
                 sm:text-[14px]
                 sm:leading-7
-
                 md:mt-6
                 md:text-[15px]
                 md:leading-7
-
                 lg:mt-7
                 lg:text-[16px]
                 lg:leading-8
@@ -345,34 +312,30 @@ const Hero = () => {
                 color: "rgba(255,255,255,0.80)",
               }}
             >
-              Discover thoughtfully crafted journeys, handpicked
-              destinations, and personalized travel experiences designed
-              around you.
-            </p>
+              Discover thoughtfully crafted journeys, handpicked destinations,
+              and travel experiences created entirely around you.
+            </motion.p>
 
-            {/* =================================================
-                CTA BUTTONS
-            ================================================== */}
-
-            <div
+            {/* CTA Buttons */}
+            <motion.div
+              variants={itemVariants}
               className="
                 mt-6
                 flex
                 w-full
                 flex-col
                 gap-3
-
                 sm:mt-7
                 sm:w-auto
                 sm:flex-row
-
                 md:mt-8
               "
             >
               {/* Primary CTA */}
-
-              <a
+              <motion.a
                 href="#enquiry"
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
                 className="
                   group
                   inline-flex
@@ -388,9 +351,6 @@ const Hero = () => {
                   font-semibold
                   transition-all
                   duration-300
-                  hover:-translate-y-0.5
-                  active:scale-[0.98]
-
                   sm:w-auto
                   sm:px-6
                   sm:text-sm
@@ -398,8 +358,7 @@ const Hero = () => {
                 style={{
                   backgroundColor: "var(--gold)",
                   color: "var(--white)",
-                  boxShadow:
-                    "0 12px 35px rgba(176,138,74,0.28)",
+                  boxShadow: "0 12px 35px rgba(176,138,74,0.28)",
                 }}
               >
                 <span>Plan Your Journey</span>
@@ -415,12 +374,13 @@ const Hero = () => {
                     group-hover:translate-x-0.5
                   "
                 />
-              </a>
+              </motion.a>
 
               {/* Secondary CTA */}
-
-              <a
+              <motion.a
                 href="#destinations"
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
                 className="
                   inline-flex
                   min-h-[48px]
@@ -436,9 +396,6 @@ const Hero = () => {
                   backdrop-blur-sm
                   transition-all
                   duration-300
-                  hover:-translate-y-0.5
-                  active:scale-[0.98]
-
                   sm:w-auto
                   sm:px-6
                   sm:text-sm
@@ -450,14 +407,12 @@ const Hero = () => {
                 }}
               >
                 Explore Destinations
-              </a>
-            </div>
+              </motion.a>
+            </motion.div>
 
-            {/* =================================================
-                TRUST INDICATORS
-            ================================================== */}
-
-            <div
+            {/* Trust Stats */}
+            <motion.div
+              variants={itemVariants}
               className="
                 mt-8
                 grid
@@ -466,33 +421,22 @@ const Hero = () => {
                 grid-cols-3
                 border-t
                 pt-5
-
                 sm:mt-9
                 sm:pt-6
-
                 md:mt-10
               "
               style={{
                 borderColor: "rgba(255,255,255,0.22)",
               }}
             >
-              {/* Travelers */}
-
+              {/* Stat 1 */}
               <div className="min-w-0 pr-2 sm:pr-4">
                 <div
-                  className="
-                    text-[20px]
-                    font-medium
-                    leading-none
-                    sm:text-2xl
-                  "
-                  style={{
-                    color: "var(--white)",
-                  }}
+                  className="text-[20px] font-medium leading-none sm:text-2xl"
+                  style={{ color: "var(--white)" }}
                 >
                   500+
                 </div>
-
                 <div
                   className="
                     mt-1.5
@@ -501,46 +445,26 @@ const Hero = () => {
                     uppercase
                     leading-4
                     tracking-[0.10em]
-
                     sm:text-[10px]
                     sm:tracking-[0.16em]
                   "
-                  style={{
-                    color: "rgba(255,255,255,0.62)",
-                  }}
+                  style={{ color: "rgba(255,255,255,0.62)" }}
                 >
                   Happy Travelers
                 </div>
               </div>
 
-              {/* Destinations */}
-
+              {/* Stat 2 */}
               <div
-                className="
-                  min-w-0
-                  border-l
-                  px-2
-
-                  sm:px-4
-                "
-                style={{
-                  borderColor: "rgba(255,255,255,0.22)",
-                }}
+                className="min-w-0 border-l px-2 sm:px-4"
+                style={{ borderColor: "rgba(255,255,255,0.22)" }}
               >
                 <div
-                  className="
-                    text-[20px]
-                    font-medium
-                    leading-none
-                    sm:text-2xl
-                  "
-                  style={{
-                    color: "var(--white)",
-                  }}
+                  className="text-[20px] font-medium leading-none sm:text-2xl"
+                  style={{ color: "var(--white)" }}
                 >
-                  25+
+                  40+
                 </div>
-
                 <div
                   className="
                     mt-1.5
@@ -549,46 +473,26 @@ const Hero = () => {
                     uppercase
                     leading-4
                     tracking-[0.10em]
-
                     sm:text-[10px]
                     sm:tracking-[0.16em]
                   "
-                  style={{
-                    color: "rgba(255,255,255,0.62)",
-                  }}
+                  style={{ color: "rgba(255,255,255,0.62)" }}
                 >
                   Destinations
                 </div>
               </div>
 
-              {/* Support */}
-
+              {/* Stat 3 */}
               <div
-                className="
-                  min-w-0
-                  border-l
-                  pl-2
-
-                  sm:pl-4
-                "
-                style={{
-                  borderColor: "rgba(255,255,255,0.22)",
-                }}
+                className="min-w-0 border-l pl-2 sm:pl-4"
+                style={{ borderColor: "rgba(255,255,255,0.22)" }}
               >
                 <div
-                  className="
-                    text-[20px]
-                    font-medium
-                    leading-none
-                    sm:text-2xl
-                  "
-                  style={{
-                    color: "var(--white)",
-                  }}
+                  className="text-[20px] font-medium leading-none sm:text-2xl"
+                  style={{ color: "var(--white)" }}
                 >
                   24/7
                 </div>
-
                 <div
                   className="
                     mt-1.5
@@ -597,26 +501,24 @@ const Hero = () => {
                     uppercase
                     leading-4
                     tracking-[0.10em]
-
                     sm:text-[10px]
                     sm:tracking-[0.16em]
                   "
-                  style={{
-                    color: "rgba(255,255,255,0.62)",
-                  }}
+                  style={{ color: "rgba(255,255,255,0.62)" }}
                 >
                   Travel Support
                 </div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* =================================================
-              RIGHT FLOATING CARD
-              DESKTOP ONLY
+              RIGHT FLOATING CARD (DESKTOP)
           ================================================== */}
-
-          <div
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 0.6, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="
               hidden
               w-full
@@ -624,25 +526,20 @@ const Hero = () => {
               rounded-[1.5rem]
               p-5
               backdrop-blur-xl
-
               lg:block
               lg:w-[260px]
               lg:max-w-none
               lg:rounded-[1.75rem]
               lg:p-6
-
               xl:w-[300px]
-
               2xl:w-[310px]
             "
             style={{
               backgroundColor: "rgba(252,250,246,0.90)",
               border: "1px solid rgba(255,255,255,0.45)",
-              boxShadow: "0 25px 70px rgba(0,0,0,0.18)",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.22)",
             }}
           >
-            {/* Icon */}
-
             <div
               className="
                 mb-5
@@ -652,7 +549,6 @@ const Hero = () => {
                 items-center
                 justify-center
                 rounded-full
-
                 lg:mb-6
                 lg:h-11
                 lg:w-11
@@ -662,10 +558,7 @@ const Hero = () => {
                 color: "var(--gold-dark)",
               }}
             >
-              <Sparkles
-                size={18}
-                strokeWidth={1.7}
-              />
+              <Sparkles size={18} strokeWidth={1.7} />
             </div>
 
             <p
@@ -674,15 +567,12 @@ const Hero = () => {
                 font-semibold
                 uppercase
                 tracking-[0.18em]
-
                 lg:text-[10px]
                 lg:tracking-[0.2em]
               "
-              style={{
-                color: "var(--gold-dark)",
-              }}
+              style={{ color: "var(--gold-dark)" }}
             >
-              The Serenity Way
+              Thoughtful Travel
             </p>
 
             <h2
@@ -690,23 +580,17 @@ const Hero = () => {
                 mt-2.5
                 text-[21px]
                 leading-tight
-
                 lg:mt-3
                 lg:text-2xl
               "
-              style={{
-                color: "var(--charcoal)",
-              }}
+              style={{ color: "var(--charcoal)" }}
             >
               Travel without the
-
               <span
                 className="block italic font-normal"
-                style={{
-                  color: "var(--gold-dark)",
-                }}
+                style={{ color: "var(--gold-dark)" }}
               >
-                unnecessary stress.
+                stress.
               </span>
             </h2>
 
@@ -715,20 +599,15 @@ const Hero = () => {
                 mt-3
                 text-[12px]
                 leading-5
-
                 lg:mt-4
                 lg:text-[13px]
                 lg:leading-6
               "
-              style={{
-                color: "var(--taupe)",
-              }}
+              style={{ color: "var(--taupe)" }}
             >
-              From the first idea to the final destination, we take
-              care of the details so you can focus on the experience.
+              We take care of the details so you can focus on enjoying the
+              journey.
             </p>
-
-            {/* Location */}
 
             <div
               className="
@@ -738,63 +617,46 @@ const Hero = () => {
                 gap-3
                 border-t
                 pt-4
-
                 lg:mt-6
                 lg:pt-5
               "
-              style={{
-                borderColor: "var(--border)",
-              }}
+              style={{ borderColor: "var(--border)" }}
             >
               <MapPin
                 size={16}
                 strokeWidth={1.7}
                 className="shrink-0"
-                style={{
-                  color: "var(--gold)",
-                }}
+                style={{ color: "var(--gold)" }}
               />
 
               <div className="min-w-0">
                 <p
-                  className="
-                    text-[10px]
-                    font-semibold
-
-                    lg:text-[11px]
-                  "
-                  style={{
-                    color: "var(--charcoal)",
-                  }}
+                  className="text-[10px] font-semibold lg:text-[11px]"
+                  style={{ color: "var(--charcoal)" }}
                 >
-                  Curated worldwide
+                  Curated Stays & Experiences
                 </p>
 
                 <p
-                  className="
-                    mt-0.5
-                    text-[9px]
-
-                    lg:text-[10px]
-                  "
-                  style={{
-                    color: "var(--taupe-light)",
-                  }}
+                  className="mt-0.5 text-[9px] lg:text-[10px]"
+                  style={{ color: "var(--taupe-light)" }}
                 >
-                  Journeys made around you
+                  Selected with care
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
 
       {/* =====================================================
           SCROLL INDICATOR
       ====================================================== */}
-
-      <a
+      <motion.a
         href="#about"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1, duration: 0.6 }}
         className="
           absolute
           bottom-5
@@ -807,9 +669,7 @@ const Hero = () => {
           transition-opacity
           duration-300
           hover:opacity-70
-
           lg:flex
-
           xl:bottom-7
         "
       >
@@ -819,25 +679,36 @@ const Hero = () => {
             font-medium
             uppercase
             tracking-[0.22em]
-
             xl:text-[9px]
             xl:tracking-[0.25em]
           "
-          style={{
-            color: "rgba(255,255,255,0.65)",
-          }}
+          style={{ color: "rgba(255,255,255,0.65)" }}
         >
-          Discover more
+          Scroll to explore
         </span>
 
-        <ArrowDown
-          size={14}
-          strokeWidth={1.4}
+        <motion.div
+          animate={{ y: [0, 5, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          className="
+            flex
+            h-7
+            w-7
+            items-center
+            justify-center
+            rounded-full
+            border
+            xl:h-8
+            xl:w-8
+          "
           style={{
-            color: "var(--gold-light)",
+            borderColor: "rgba(255,255,255,0.25)",
+            color: "var(--white)",
           }}
-        />
-      </a>
+        >
+          <ArrowDown size={13} strokeWidth={1.5} />
+        </motion.div>
+      </motion.a>
     </section>
   );
 };

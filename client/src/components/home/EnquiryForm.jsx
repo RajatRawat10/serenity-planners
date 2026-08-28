@@ -116,57 +116,57 @@ const EnquiryForm = () => {
   ========================================================= */
 
   const onSubmit = async (data) => {
-    setServerState({
-      submitting: true,
-      success: false,
-      error: null,
-      referenceId: null,
+  setServerState({
+    submitting: true,
+    success: false,
+    error: null,
+    referenceId: null,
+  });
+
+  try {
+    const baseUrl =
+      import.meta.env.VITE_API_URL ||
+      "http://localhost:5001";
+
+    const response = await fetch(`${baseUrl}/api/enquiries`, {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify(data),
     });
 
-    try {
-      const baseUrl =
-        import.meta.env.VITE_API_URL ||
-        "http://localhost:5001/api";
+    const result = await response.json();
 
-      const response = await fetch(`${baseUrl}/enquiries`, {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        throw new Error(
-          result.message ||
-            "We couldn't send your enquiry. Please try again."
-        );
-      }
-
-      setServerState({
-        submitting: false,
-        success: true,
-        error: null,
-        referenceId:
-          result.data?.id || "SER-CONFIRMED",
-      });
-
-      reset();
-    } catch (error) {
-      setServerState({
-        submitting: false,
-        success: false,
-        error:
-          error.message ||
-          "Something went wrong. Please try again.",
-        referenceId: null,
-      });
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message ||
+          "We couldn't send your enquiry. Please try again."
+      );
     }
-  };
+
+    setServerState({
+      submitting: false,
+      success: true,
+      error: null,
+      referenceId:
+        result.data?.id || "SER-CONFIRMED",
+    });
+
+    reset();
+  } catch (error) {
+    setServerState({
+      submitting: false,
+      success: false,
+      error:
+        error.message ||
+        "Something went wrong. Please try again.",
+      referenceId: null,
+    });
+  }
+};
 
   return (
     <section

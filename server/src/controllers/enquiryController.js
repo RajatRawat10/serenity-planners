@@ -17,7 +17,12 @@ export const createEnquiry = async (req, res, next) => {
         travelType: enquiryData.travelType,
         destination: enquiryData.destination,
         submittedAt: new Date().toISOString(),
-        emailStatus: emailResult.simulated ? 'simulated' : 'sent',
+        emailStatus: emailResult.simulated
+          ? 'simulated'
+          : emailResult.success
+          ? 'sent'
+          : 'failed',
+        ...(emailResult.error ? { emailError: emailResult.error } : {}),
       },
     });
   } catch (error) {

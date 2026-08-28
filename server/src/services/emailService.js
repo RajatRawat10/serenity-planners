@@ -7,17 +7,17 @@ import nodemailer from 'nodemailer';
 const createTransporter = async () => {
   const host = process.env.SMTP_HOST;
   const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
+  const pass = process.env.SMTP_PASS ? process.env.SMTP_PASS.replace(/\s+/g, '') : undefined;
   const port = Number(process.env.SMTP_PORT) || 587;
 
   if (host && user && pass) {
     return nodemailer.createTransport({
       host,
       port,
-      secure: port === 465, // true for 465, false for 587/other ports
+      secure: port === 465, // true for port 465, false for 587
       auth: { user, pass },
       tls: {
-        rejectUnauthorized: false, // Prevents self-signed cert failures in dev
+        rejectUnauthorized: false, // Prevents self-signed cert failures in production/dev
       },
     });
   }

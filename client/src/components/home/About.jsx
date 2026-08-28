@@ -65,6 +65,8 @@ const About = () => {
               <motion.img
                 src={aboutImage}
                 alt="Scenic travel destination"
+                loading="lazy"
+                decoding="async"
                 whileHover={{ scale: 1.04 }}
                 transition={{ duration: 0.6 }}
                 className="h-full w-full object-cover object-center"

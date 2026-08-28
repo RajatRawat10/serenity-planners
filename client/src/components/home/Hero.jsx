@@ -87,6 +87,8 @@ const Hero = () => {
           <img
             src={heroBg}
             alt="Beautiful travel destination"
+            fetchpriority="high"
+            decoding="async"
             className="
               absolute
               inset-0

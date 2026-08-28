@@ -370,8 +370,9 @@ const Footer = () => {
               >
                 <img
                   src={logo}
-                  alt=""
-                  aria-hidden="true"
+                  alt="Serenity Planners Logo"
+                  loading="lazy"
+                  decoding="async"
                   className="
                     absolute
                     left-0

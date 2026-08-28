@@ -116,57 +116,75 @@ const EnquiryForm = () => {
   ========================================================= */
 
   const onSubmit = async (data) => {
-  setServerState({
-    submitting: true,
-    success: false,
-    error: null,
-    referenceId: null,
-  });
-
-  try {
-    const baseUrl =
-      import.meta.env.VITE_API_URL ||
-      "http://localhost:5001";
-
-    const response = await fetch(`${baseUrl}/api/enquiries`, {
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json",
-      },
-
-      body: JSON.stringify(data),
-    });
-
-    const result = await response.json();
-
-    if (!response.ok || !result.success) {
-      throw new Error(
-        result.message ||
-          "We couldn't send your enquiry. Please try again."
-      );
-    }
-
     setServerState({
-      submitting: false,
-      success: true,
-      error: null,
-      referenceId:
-        result.data?.id || "SER-CONFIRMED",
-    });
-
-    reset();
-  } catch (error) {
-    setServerState({
-      submitting: false,
+      submitting: true,
       success: false,
-      error:
-        error.message ||
-        "Something went wrong. Please try again.",
+      error: null,
       referenceId: null,
     });
-  }
-};
+
+    try {
+      let baseUrl = (
+        import.meta.env.VITE_API_URL || "http://localhost:5001"
+      ).trim();
+
+      // Ensure protocol scheme is present (defaults to https:// if omitted in Vercel env vars)
+      if (!baseUrl.startsWith("http://") && !baseUrl.startsWith("https://")) {
+        baseUrl = `https://${baseUrl}`;
+      }
+
+      // Strip trailing slashes
+      baseUrl = baseUrl.replace(/\/+$/, "");
+
+      // Determine endpoint path (avoid duplicating /api if VITE_API_URL already contains /api)
+      const apiUrl = baseUrl.endsWith("/api")
+        ? `${baseUrl}/enquiries`
+        : `${baseUrl}/api/enquiries`;
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const contentType = response.headers.get("content-type");
+      let result = {};
+      if (contentType && contentType.includes("application/json")) {
+        result = await response.json();
+      } else {
+        throw new Error(
+          `Unable to connect to backend server (${response.status} ${response.statusText}). Please check API URL.`
+        );
+      }
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message ||
+            "We couldn't send your enquiry. Please try again."
+        );
+      }
+
+      setServerState({
+        submitting: false,
+        success: true,
+        error: null,
+        referenceId: result.data?.id || "SER-CONFIRMED",
+      });
+
+      reset();
+    } catch (error) {
+      setServerState({
+        submitting: false,
+        success: false,
+        error:
+          error.message ||
+          "Something went wrong. Please try again.",
+        referenceId: null,
+      });
+    }
+  };
 
   return (
     <section

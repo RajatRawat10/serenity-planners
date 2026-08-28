@@ -40,8 +40,26 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleNavClick = () => {
+  const handleNavClick = (e, href) => {
     setIsMenuOpen(false);
+    if (href && href.startsWith("#")) {
+      e.preventDefault();
+      const targetId = href.replace("#", "");
+
+      setTimeout(() => {
+        const element = document.getElementById(targetId);
+        if (element) {
+          const headerOffset = 80;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
+        }
+      }, 50);
+    }
   };
 
   return (
@@ -84,7 +102,7 @@ const Navbar = () => {
           ====================================================== */}
           <a
             href="#home"
-            onClick={handleNavClick}
+            onClick={(e) => handleNavClick(e, "#home")}
             aria-label="Serenity Planners - Home"
             className="
               group
@@ -148,6 +166,7 @@ const Navbar = () => {
                 <a
                   key={link.name}
                   href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   className="
@@ -206,6 +225,7 @@ const Navbar = () => {
           ====================================================== */}
           <motion.a
             href="#enquiry"
+            onClick={(e) => handleNavClick(e, "#enquiry")}
             whileHover={{ y: -2, scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             transition={{ duration: 0.2 }}
@@ -307,11 +327,12 @@ const Navbar = () => {
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
+              key="mobile-menu"
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="overflow-hidden border-t lg:hidden"
+              className="max-h-[calc(100vh-80px)] overflow-y-auto overflow-x-hidden border-t lg:hidden"
               style={{
                 backgroundColor: "var(--ivory)",
                 borderColor: "var(--border)",
@@ -338,7 +359,7 @@ const Navbar = () => {
                       initial={{ x: -10, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: index * 0.05 + 0.1 }}
-                      onClick={handleNavClick}
+                      onClick={(e) => handleNavClick(e, link.href)}
                       className="
                         flex
                         min-h-[48px]
@@ -370,7 +391,7 @@ const Navbar = () => {
                     initial={{ y: 10, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: navLinks.length * 0.05 + 0.1 }}
-                    onClick={handleNavClick}
+                    onClick={(e) => handleNavClick(e, "#enquiry")}
                     className="
                       mt-4
                       flex

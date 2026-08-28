@@ -124,63 +124,53 @@ const EnquiryForm = () => {
     });
 
     try {
-      let baseUrl = (
-        import.meta.env.VITE_API_URL || "http://localhost:5001"
-      ).trim();
+      const payload = {
+        access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
+        subject: `[New Travel Enquiry] ${data.travelType} - ${data.fullName}`,
+        from_name: "Serenity Planners Website",
+        name: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        travel_type: data.travelType,
+        destination: data.destination || "Flexible / Open to ideas",
+        travel_date: data.travelDate || "To be decided",
+        travelers: data.travelers || "Not specified",
+        budget: data.budget || "Custom Quote",
+        message: data.message,
+      };
 
-      // Ensure protocol scheme is present (defaults to https:// if omitted in Vercel env vars)
-      if (!baseUrl.startsWith("http://") && !baseUrl.startsWith("https://")) {
-        baseUrl = `https://${baseUrl}`;
-      }
-
-      // Strip trailing slashes
-      baseUrl = baseUrl.replace(/\/+$/, "");
-
-      // Determine endpoint path (avoid duplicating /api if VITE_API_URL already contains /api)
-      const apiUrl = baseUrl.endsWith("/api")
-        ? `${baseUrl}/enquiries`
-        : `${baseUrl}/api/enquiries`;
-
-      const response = await fetch(apiUrl, {
+      const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
 
-      const contentType = response.headers.get("content-type");
-      let result = {};
-      if (contentType && contentType.includes("application/json")) {
-        result = await response.json();
+      const result = await response.json();
+
+      if (response.status === 200 && result.success) {
+        const refId = `SER-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+        setServerState({
+          submitting: false,
+          success: true,
+          error: null,
+          referenceId: refId,
+        });
+        reset();
       } else {
         throw new Error(
-          `Unable to connect to backend server (${response.status} ${response.statusText}). Please check API URL.`
+          result.message || "Failed to submit enquiry. Please try again."
         );
       }
-
-      if (!response.ok || !result.success) {
-        throw new Error(
-          result.message ||
-            "We couldn't send your enquiry. Please try again."
-        );
-      }
-
-      setServerState({
-        submitting: false,
-        success: true,
-        error: null,
-        referenceId: result.data?.id || "SER-CONFIRMED",
-      });
-
-      reset();
     } catch (error) {
       setServerState({
         submitting: false,
         success: false,
         error:
           error.message ||
-          "Something went wrong. Please try again.",
+          "Something went wrong. Please check your network and try again.",
         referenceId: null,
       });
     }

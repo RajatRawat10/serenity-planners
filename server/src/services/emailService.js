@@ -16,8 +16,14 @@ const createTransporter = async () => {
       port,
       secure: port === 465, // true for port 465, false for 587
       auth: { user, pass },
+      // Force IPv4 — Railway resolves smtp.gmail.com to IPv6 (2a00:1450:...)
+      // but cannot bind outbound IPv6 sockets, causing EADDRNOTAVAIL.
+      family: 4,
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 15000,
       tls: {
-        rejectUnauthorized: false, // Prevents self-signed cert failures in production/dev
+        rejectUnauthorized: false,
       },
     });
   }
